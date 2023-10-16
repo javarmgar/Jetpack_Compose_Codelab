@@ -21,26 +21,158 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
+import com.codelab.basiclayouts.ui.theme.typography
 
+
+/*
+Basics layouts in compose
+
+Jetpack compose is a UI Toolkit - makes it easy to implement UI designs
+
+Compose:
+ DEV - describe how we want to our UI to look (base on the state)
+ Compose - responsible of drawing it
+
+Previous codelab:
+- How to implement simple layouts using Surfaces, Rows and Columns.
+- How to augment: these layouts with modifiers: Padding, fillMaxWidth, and size.
+
+Concepts to be learned:
+- Modifiers to augment(ˌôɡˈment) your composables.
+- Standard  layout components: Column and LazyRow: How to position size composables.
+- Alignments and arrangaments: They change position of child composable within their respective parent
+- Material Composables to create comprehensive layouts:
+    - Scaffold
+    - Bottom Navigation
+- Flexible composables using Slot API's
+- Build Layouts for different screen configurations.
+
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MySootheApp() }
+        setContent {
+            MySootheTheme {
+                MySootheApp()
+            }
+        }
     }
 }
 
+/*
+START WITH A PLAN
+
+1.- Analyze the design itself.
+2.- Split the UI into multiple reusable parts from  the Ux UI template design
+
+example:
+-UI Screen
+    - Screen content
+    - Bottom navigation
+3. Continue drilling down
+-UI Screen
+    - Screen content
+        - Search bar
+        - 'align your body' section (scrollable row)
+            - 'align your body' element
+        - 'Favorites collection' section ( scrollable grid)
+            -'Favorites collection' element
+    - Bottom navigation
+ */
+
+
+
 // Step: Search bar - Modifiers
+/*
+
+This composable function accepts a modifier parameter and passes this on to the textfield
+composable function
+
+ This is a best practice as per Compose guidelines.
+
+ This allows the method's caller to modify the composable's look and feel, which makes it more
+ flexible and reusable.
+
+ */
+
+/*
+Modifiers:
+
+They are used to:
+
+1.- Change attrs like:
+    - size,
+    - layout,
+    - behavior,
+    - appearance.
+2.- Add information, like accessibility labels.
+3.- To Process user input.
+4.- To  high-level interactions:
+    - making an element clickable,
+    - scrollable,
+    - draggable,
+    - zoomable.
+
+
+- Each composable has a modifier parameter -> to adapt that composable's look, feel and behavior.
+- When setting the modifier -> possible to chain multiple modifier methods to create a more complex adaptation.
+    modifier
+        .method1(...)...
+        .method2(...)...
+        .methodN(...)...
+
+- There's a list of modifiers
+ */
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier
 ) {
-    // Implement composable here
+    TextField(
+        value = "",
+        onValueChange = {},
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = null
+            )// Icon composable ( it is overloaded) this one receives ImageVector Object
+        },
+        colors = TextFieldDefaults.colors( // defaults for the text field shape, height, width, thickness
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedContainerColor = MaterialTheme.colorScheme.surface
+        ) ,
+        placeholder = { // we can call stringResource composable function to get the string based on the Id
+            Text(
+                stringResource(id = R.string.placeholder_search),
+                style = typography.bodySmall
+
+            )
+        },
+        modifier = modifier
+            .fillMaxWidth() // uses all horizontal space of its parent
+            .heightIn(min = 56.dp), // to establish a minimum height
+
+    )
 }
 
 // Step: Align your body - Alignment
@@ -48,7 +180,16 @@ fun SearchBar(
 fun AlignYourBodyElement(
     modifier: Modifier = Modifier
 ) {
-    // Implement composable here
+
+    Column(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.ab1_inversions),
+            contentDescription = null
+        )
+        Text(text = stringResource(id = R.string.ab1_inversions))
+
+    }
+
 }
 
 // Step: Favorite collection card - Material Surface
@@ -116,7 +257,7 @@ fun MySootheAppLandscape(){
 // Step: MySoothe App
 @Composable
 fun MySootheApp() {
-    // Implement composable here
+    SearchBar(Modifier.padding(8.dp))
 }
 
 private val alignYourBodyData = listOf(
@@ -142,10 +283,17 @@ private data class DrawableStringPair(
     @StringRes val text: Int
 )
 
-@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFFF5F0EE,
+    widthDp = 320,
+    heightDp = 56
+)
 @Composable
 fun SearchBarPreview() {
-    MySootheTheme { SearchBar(Modifier.padding(8.dp)) }
+    MySootheTheme {
+        SearchBar(Modifier.padding(8.dp))
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
