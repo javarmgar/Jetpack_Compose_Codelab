@@ -239,7 +239,6 @@ Scales:
  .paddingFromBaseline(top = 24.dp, bottom = 8.dp)
 
 */
-
 @Composable
 fun AlignYourBodyElement(
     modifier: Modifier = Modifier,
@@ -273,6 +272,12 @@ fun AlignYourBodyElement(
 
 // Step: Favorite collection card - Material Surface
 /*
+Material Surface
+It is a component of the material design library. It follows material design patterns
+and I can adapt it by changing app theme's colors.
+
+Material.shapes.medium : It changes the shape of the surface
+
 
  */
 @Composable
