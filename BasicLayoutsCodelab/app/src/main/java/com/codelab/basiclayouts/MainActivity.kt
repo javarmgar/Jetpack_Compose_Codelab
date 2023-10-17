@@ -23,16 +23,19 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -181,6 +184,62 @@ fun SearchBar(
 }
 
 // Step: Align your body - Alignment
+/*
+Alignment
+
+- Column to position elements underneath each other
+- Composable has to be reusable: Extract hardcoded attrs an put them as parameters so the composable
+will be dynamic.
+
+- modify width and height: There are several modifier methods
+    - size: preferred size of the content to be exactly size dp square
+- clip:
+    - clip the content to shape: It requires a Shape object one predefined is Circular shape
+
+- Alignment concept
+
+1 D - start  center end
+=>
+Column: Vertical dimension - horizontal alignment:
+    - Start
+    - CenterHorizontally
+    - End
+
+Row: Horizontal dimension - vertical alignment:
+    - Top
+    - CenterVertically
+    - Bottom
+
+Box: 2d, cross product of column and row  3 X 3
+    TopStart
+    TopCenter
+    TopEnd
+    CenterStart
+    Center
+    CenterEnd
+    BottomStart
+    BottomCenter
+    BottomEnd
+
+
+YOU define aignment in a container
+ - > Children follow alignment
+    -> Want to override it ? Then call modifier.align() to override behavior
+
+Scales:
+    It represents a rule to apply to scale a source rectangle
+    so the it gets inscribed into a destination.
+    - crop: scale the source mantaining aspect ratio so that source dimensions  >= destination
+    - fit: scale the source mantaining aspect ratio so that source dimensions  <= destination
+    - fillbounds: scale source (NOT maintaining aspect ratio) to fill destination bounds.
+
+ It's considered a best practice among designers to align text elements based on their baseline,
+ instead of their top or bottom.
+
+ .paddingFromBaseline(top = 24.dp, bottom = 8.dp)
+
+*/
+
 @Composable
 fun AlignYourBodyElement(
     modifier: Modifier = Modifier,
@@ -213,11 +272,37 @@ fun AlignYourBodyElement(
 }
 
 // Step: Favorite collection card - Material Surface
+/*
+
+ */
 @Composable
 fun FavoriteCollectionCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    @DrawableRes drawable: Int,
+    @StringRes text: Int
 ) {
-    // Implement composable here
+    Surface(
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = modifier
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.width(255.dp)
+        ) {
+            Image(
+                painter = painterResource(id = drawable),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(80.dp)
+            )
+            Text(
+                text = stringResource(id = text),
+                style = typography.titleMedium,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
+    }
 }
 
 // Step: Align your body row - Arrangements
@@ -333,7 +418,9 @@ fun AlignYourBodyElementPreview() {
 fun FavoriteCollectionCardPreview() {
     MySootheTheme {
         FavoriteCollectionCard(
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            R.drawable.fc2_nature_meditations,
+            R.string.fc2_nature_meditations
         )
     }
 }
