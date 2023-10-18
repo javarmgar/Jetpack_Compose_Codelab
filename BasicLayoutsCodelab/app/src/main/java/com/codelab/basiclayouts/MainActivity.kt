@@ -398,6 +398,25 @@ fun FavoriteCollectionsGrid(
 }
 
 // Step: Home section - Slot APIs
+/*
+Slot based layouts
+They leave an empty space in the UI for the developer to fill as they wish.
+We can use them to create more flexible layouts.
+
+An slot can be filled in dynamically with different content, depending on the section
+in order to do this implementation we use  lambda function received as parameters
+named according their purpose.
+
+e.g.
+@Composable
+fun exampleComposableFunction(
+    content: @Composable () -> Unit //The annotation tells the compiler this function is a composable function
+){
+   SomeComponent(){
+        //...
+        content() insertion of the content.
+   }
+ */
 @Composable
 fun HomeSection(
     modifier: Modifier = Modifier,
