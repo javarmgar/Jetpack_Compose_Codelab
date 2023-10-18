@@ -512,10 +512,17 @@ private fun SootheBottomNavigation(modifier: Modifier = Modifier) {
 }
 
 // Step: MySoothe App - Scaffold
+/*
+- Scaffold gives you a top-level configurable composable for apps that implement Material design.
+- It contains slots for various Material concepts
+    - one of which is the bottom bar
+
+
+ */
 @Composable
 fun MySootheAppPortrait() {
    MySootheTheme {
-       Scaffold(
+       Scaffold( //this composable sets the background color for me for landscape I will need to set it in a surface component
            bottomBar = { SootheBottomNavigation() }
        ) {  padding ->
             HomeScreen(Modifier.padding(padding))
@@ -524,16 +531,62 @@ fun MySootheAppPortrait() {
 }
 
 // Step: Bottom navigation - Material
+/*
+
+landscape mode
+Navigation rail - Instead of navigationbar
+navigationRailItem - Instead of navigationbaritem
+
+ */
 @Composable
 private fun SootheNavigationRail(modifier: Modifier = Modifier) {
+    NavigationRail(
+        containerColor = MaterialTheme.colorScheme.background,
+        modifier = modifier.padding(start = 8.dp, end = 8.dp),
+    ) {
+        Column(
+            modifier = modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            NavigationRailItem(
+                selected = true,
+                onClick = {},
+                icon = {
+                    Icon(imageVector = Icons.Default.Spa, contentDescription = null)
+                },
+                label = {
+                    Text(text = stringResource(id = R.string.bottom_navigation_home))
+                }
+            )
+            Spacer(modifier = modifier.height(8.dp))
+            NavigationRailItem(
+                selected = false,
+                onClick = {},
+                icon = {
+                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null)
+                },
+                label = {
+                    Text(text = stringResource(id = R.string.bottom_navigation_profile))
+                }
+            )
 
+        }
+    }
 
 }
 
 // Step: Landscape Mode
 @Composable
 fun MySootheAppLandscape(){
-    // Implement composable here
+    MySootheTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {//Here I set the background color.
+            Row {
+                SootheNavigationRail()
+                HomeScreen()
+            }
+        }
+    }
 }
 
 // Step: MySoothe App
@@ -656,7 +709,7 @@ fun MySoothePortraitPreview() {
     MySootheAppPortrait()
 }
 
-@Preview(widthDp = 640, heightDp = 360)
+@Preview(widthDp = 640, heightDp = 360, backgroundColor = 0xFFF5F0EE)
 @Composable
 fun MySootheLandscapePreview() {
     MySootheAppLandscape()
