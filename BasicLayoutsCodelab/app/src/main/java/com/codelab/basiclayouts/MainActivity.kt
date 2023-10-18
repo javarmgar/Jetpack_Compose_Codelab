@@ -22,6 +22,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -363,15 +364,27 @@ fun AlignYourBodyRow(
 }
 
 // Step: Favorite collections grid - LazyGrid
+/*
+Lazy grids
+
+We have 2 Dimensions X,Y
+we can determine the size of one of the two dimensions
+
+X fixed -> Y dynamic -> Y has the scroll => LazyVerticalGrid
+Y fixed -> X dynamic -> X has the scroll => LazyHorizontalGrid
+
+set the Fixed dimension using: rows(columns) = GridCells.Fixed(2),
+
+ */
 @Composable
 fun FavoriteCollectionsGrid(
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(
-        rows = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        rows = GridCells.Fixed(2), // to establish the fixed dimension
+        contentPadding = PaddingValues(16.dp), // to stablish some padding between the items
+        horizontalArrangement = Arrangement.spacedBy(16.dp), // start and end
+        verticalArrangement = Arrangement.spacedBy(16.dp), //top and bottom
         modifier = modifier.height(168.dp)
     ){
         items(favoriteCollectionsData){ item ->
@@ -387,9 +400,23 @@ fun FavoriteCollectionsGrid(
 // Step: Home section - Slot APIs
 @Composable
 fun HomeSection(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    @StringRes title:Int,
+    content: @Composable () -> Unit,
 ) {
-    // Implement composable here
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(id = title),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier
+                .paddingFromBaseline(
+                    top = 40.dp,
+                    bottom = 16.dp
+                )
+                .padding(horizontal = 16.dp)
+        )
+        content()
+    }
 }
 
 // Step: Home screen - Scrolling
@@ -503,7 +530,13 @@ fun AlignYourBodyRowPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
 @Composable
 fun HomeSectionPreview() {
-    MySootheTheme { HomeSection() }
+    MySootheTheme {
+        HomeSection(
+            title = R.string.align_your_body
+        ){
+            AlignYourBodyRow()
+        }
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
